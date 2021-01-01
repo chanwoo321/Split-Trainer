@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Split Trainer</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script> 
+<script>
+        var tick = new Audio("sounds/met click.mp3");
+    </script>
+</head>
+
+<body>
+    <header>
+        <p>Split Trainer</p>
+        <p>&nbsp;</p>
+    </header>
+    <div style = "text-align:center;">
+        <canvas id="canvas" tabindex="1" height="500" width="800" margin-left="auto" margin-right="auto" style="background-color:#999"> 
+            <p>You're using a browser that does not support the functionality to play this game!</p>
+            <p>Please update to a modern browser such as Google Chrome.</p>
+        </canvas>
+    </div>
+<!--    <script src="practice.js"></script>-->
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var tick = new Audio("sounds/met click.mp3");
+        var metronomeTick = new Audio("sounds/met click.mp3");
+        var bpm = 80;
+        var metronomeOn = true;
+
+        ctx.moveTo(0, 0);
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.rect(10, 10, 780, 300);
+        ctx.fillStyle = "rgb(0, 0, 255)";
+        ctx.fill()
+        
+        ctx.beginPath();
+        ctx.rect(50, 50, 100, 100);
+        ctx.fillStyle = "rgb(0, 255, 0)";
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.rect(650, 50, 100, 100);
+        ctx.fillStyle = "rgb(0, 255, 0)";
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.rect(190, 50, 420, 100);
+        ctx.fillStyle = "rgb(0, 255, 0)";
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.rect(650, 180, 100, 100);
+        ctx.fillStyle = "rgb(0, 255, 0)";
+        ctx.fill();
+
+        // Allows actions to occur when keys are pressed down. 
+        // Currently only reacts to the space bar being pressed.
+        canvas.addEventListener("keydown", doKeyDown, true);
+        canvas.addEventListener("keyup", doKeyUp, true);
+        canvas.addEventListener('click', doClick, true);
+        
+        var space_pressed = false;
+        var KEY_CODES = {
+            32: "space"
+        };
+        var KEY_STATUS = {
+            32 : false
+        };
+        
+        function playTick() {
+            tick.play();
+            tick.currentTime=0;
+        }
+        function doKeyDown(e) {
+            if (KEY_CODES[e.keyCode] == "space" && !space_pressed) {
+                playTick();
+                space_pressed = true;
+            }
+        }
+        function doKeyUp(e) {
+            if (KEY_CODES[e.keyCode] == "space") {
+                space_pressed = false;
+            }
+        }
+        function doClick(e) {
+            var clickX = e.pageX - canvas.offsetLeft;
+            var clickY = e.pageY - canvas.offsetTop;
+//            alert(clickX + "  " + clickY);
+            if (clickX > 50 && clickX < 150 && clickY > 50 && clickY < 150) {
+                updateBPM(-1);
+                metronomeOn = false;
+            }
+            if (clickX > 650 && clickX < 750 && clickY > 50 && clickY < 150) {
+                updateBPM(1);
+                metronomeOn = false;
+            }
+            if (clickX > 650 && clickX < 750 && clickY > 180 && clickY < 280) {
+                metronomeOn = !metronomeOn;
+                metronome();
+            }
+        }
+        function updateBPM(change) {
+            bpm += change
+            ctx.beginPath();
+            ctx.rect(190, 50, 420, 100);
+            ctx.fillStyle = "rgb(0, 255, 0)";
+            ctx.fill();
+            
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.font = "64px Arial";
+            ctx.fillText(bpm + "  BPM", 400, 120);
+        }
+        updateBPM(0);
+        function metronome() {
+            var timing = 60 / bpm * 1000;
+            if (metronomeOn) {
+                metronomeTick.play();
+                metronomeTick.currentTime=0;
+                setTimeout(function(){metronome();}, timing);
+            }
+        }
+    </script>
+    <script src="menu.js"></script> 
+    <div style = "text-align:center;">
+        <button onClick="tick.play()
+                       tick.currentTime=0" 
+              type="button">Click me!</button>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class ="col-md-1">
+                <h2>column 1</h2>
+            </div>
+            <div class ="col-md-10"> </div>
+            <div class ="col-md-1">
+                <h2>column 12</h2>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
