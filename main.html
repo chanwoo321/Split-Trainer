@@ -7,9 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
-<script>
-        var tick = new Audio("sounds/met click.mp3");
-    </script>
 </head>
 
 <body>
@@ -37,39 +34,75 @@
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
         var tick = new Audio("sounds/met click.mp3");
-        var metronomeTick = new Audio("sounds/met click.mp3");
+        var metronomeTick = new Audio("sounds/met click copy.mp3");
         var bpm = 80;
         var metronomeOn = true;
 
-        ctx.moveTo(0, 0);
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.stroke();
-
+        // Blue background
         ctx.beginPath();
         ctx.rect(10, 10, 780, 300);
         ctx.fillStyle = "rgb(0, 0, 255)";
         ctx.fill()
         
+        // Left play button
         ctx.beginPath();
         ctx.rect(50, 50, 100, 100);
         ctx.fillStyle = "rgb(0, 255, 0)";
         ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(120, 70);
+        ctx.lineTo(120, 130);
+        ctx.lineTo(70, 100);
+        ctx.fill();
         
+        // Right BPM button
         ctx.beginPath();
         ctx.rect(650, 50, 100, 100);
         ctx.fillStyle = "rgb(0, 255, 0)";
         ctx.fill();
-        
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(680, 70);
+        ctx.lineTo(680, 130);
+        ctx.lineTo(730, 100);
+        ctx.fill();    
+    
+        // Middle BPM box. Text is not filled in yet
         ctx.beginPath();
         ctx.rect(190, 50, 420, 100);
         ctx.fillStyle = "rgb(0, 255, 0)";
         ctx.fill();
         
+        // Metronome play button
         ctx.beginPath();
         ctx.rect(650, 180, 100, 100);
         ctx.fillStyle = "rgb(0, 255, 0)";
         ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(665, 210);
+        ctx.lineTo(665, 250);
+        ctx.lineTo(695, 230);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.rect(705, 210, 10, 40);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.rect(725, 210, 10, 40);
+        ctx.fill();
 
+        // Bottom Text
+        ctx.beginPath();
+        ctx.rect(10, 310, 780, 180);
+        ctx.fillStyle = "rgb(255, 0, 0)";
+        ctx.fill();
+    
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.font = "60px Arial";
+        ctx.fillText("Press Space to play a note", 400, 420);
+    
         // Allows actions to occur when keys are pressed down. 
         // Currently only reacts to the space bar being pressed.
         canvas.addEventListener("keydown", doKeyDown, true);
@@ -88,6 +121,10 @@
             tick.play();
             tick.currentTime=0;
         }
+        function playMetronomeTick() {
+            metronomeTick.play();
+            metronomeTick.currentTime=0;
+        }
         function doKeyDown(e) {
             if (KEY_CODES[e.keyCode] == "space" && !space_pressed) {
                 playTick();
@@ -104,11 +141,15 @@
             var clickY = e.pageY - canvas.offsetTop;
 //            alert(clickX + "  " + clickY);
             if (clickX > 50 && clickX < 150 && clickY > 50 && clickY < 150) {
-                updateBPM(-1);
+                if (bpm > 30) {
+                    updateBPM(-1);
+                }
                 metronomeOn = false;
             }
             if (clickX > 650 && clickX < 750 && clickY > 50 && clickY < 150) {
-                updateBPM(1);
+                if (bpm < 240) {
+                    updateBPM(1);
+                }
                 metronomeOn = false;
             }
             if (clickX > 650 && clickX < 750 && clickY > 180 && clickY < 280) {
